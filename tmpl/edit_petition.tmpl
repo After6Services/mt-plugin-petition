@@ -1,0 +1,334 @@
+<mt:setvarblock name="page_title"><__trans phrase="Edit Petition"></mt:setvarblock>
+    <mt:if name="new_object">
+        <$mt:setvar name="page_title" value="<__trans phrase="Create Petition">"$>
+    </mt:if>
+
+<$mt:setvar name="position_actions_bottom" value="1"$>
+<mt:setvarblock name="system_msg">
+    <mt:if name="saved_added">
+        <mtapp:statusmsg
+            id="saved"
+            class="success">
+
+            <__trans phrase="Your new petition has been saved.">
+        </mtapp:statusmsg>
+	</mt:if>
+	<mt:if name="saved">
+        <mtapp:statusmsg
+            id="saved"
+            class="success">
+            <__trans phrase="Your changes have been saved. Republish the petition's page to see the changes.">
+         </mtapp:statusmsg>
+    </mt:if>
+</mt:setvarblock>
+<mt:setvartemplate name="action_buttons">
+    <button
+        type="submit"
+        accesskey="s"
+        title="<__trans phrase="Save changes to this petition (s)">"
+        class="primary-button"
+        ><__trans phrase="Save"></button>
+    <button
+        onclick="history.back(); return false;"
+        accesskey="x"
+        title="<__trans phrase="Cancel (x)">"
+        ><__trans phrase="Cancel"></button>
+</mt:setvartemplate>
+
+
+<mt:setvarblock name="related_content">
+    <mtapp:widget
+        id="useful-links"
+        label="<__trans phrase="Useful links">">
+        <ul>
+        <mt:if name="previous_comment_id">
+            <li><a href="<mt:var name="script_url">?__mode=view&amp;_type=comment&amp;id=<mt:var name="previous_comment_id">&amp;blog_id=<mt:var name="blog_id">"><__trans phrase="Previous Comment"></a></li>
+        </mt:if>
+        <mt:if name="next_comment_id">
+            <li><a href="<mt:var name="script_url">?__mode=view&amp;_type=comment&amp;id=<mt:var name="next_comment_id">&amp;blog_id=<mt:var name="blog_id">"><__trans phrase="Next Comment"></a></li>
+        </mt:if>
+            <li><a href="<mt:var name="script_url">?__mode=list_petitions&amp;blog_id=<mt:var name="blog_id">"><__trans phrase="Manage Petitions"></a></li>
+        </ul>
+    </mtapp:widget>
+    <$mtapp:PageActions$>
+</mt:setvarblock>
+
+<mt:setvarblock name="html_head" append="1">
+   <script src="<mt:CGIRelativeURL>/mt-static/plugins/Petition/js/jquery-1.3.2.min.js" type="text/javascript"></script>
+   <script type="text/javascript">
+      <!--
+          jQuery.noConflict();
+        -->
+   </script>
+</mt:setvarblock>
+
+<mt:include name="include/header.tmpl">
+
+<form method="post" action="<mt:var name="script_url">">
+    <input type="hidden" name="id" value="<mt:var name="id">" />
+    <input type="hidden" name="blog_id" value="<mt:var name="blog_id">" />
+    <input type="hidden" name="__mode" value="save_petition" />
+    <input type="hidden" name="action_name" value="" />
+    <input type="hidden" name="itemset_action_input" value="" />
+    <input type="hidden" name="_type" value="petition" />
+    <input type="hidden" name="return_args" value="<mt:var name="return_args" escape="html">" />
+    <input type="hidden" name="magic_token" value="<mt:var name="magic_token">" />
+
+<mt:if name="position_actions_top">
+    <mt:include name="include/actions_bar.tmpl" bar_position="top" hide_pager="1">
+</mt:if>
+
+
+<mtapp:setting
+    id="petition_title"
+    label="<__trans phrase="Title">"
+    label_class="left-label"
+    hint="<__trans phrase="Title of Petition">"
+    show_hint="0">
+   <input name="petition_title" id="petition_title" value="<mt:var name="petition_title" escape="html">" class="full-width" />
+</mtapp:setting>
+
+<mtapp:setting
+    id="petition_salesforce_id"
+    label="<__trans phrase="Salesforce ID">"
+    label_class="left-label"
+    hint="<__trans phrase="Salesforce ID for campaign">"
+    show_hint="0">
+   <input name="petition_salesforce_id" id="petition_salesforce_id" value="<mt:var name="petition_salesforce_id" escape="html">" class="full-width" />
+</mtapp:setting>
+
+<mtapp:setting
+    id="petition_description"
+    label="<__trans phrase="Description">"
+    label_class="left-label"
+    hint="<__trans phrase="Description of Petition">"
+    show_hint="0">
+   <textarea name="petition_description" id="petition_description" class="full-width" rows="3" cols="50"><mt:var name="petition_description" escape="html"></textarea>
+</mtapp:setting>
+
+<mtapp:setting
+    id="petition_thank_you"
+    label="<__trans phrase="Thank You Content">"
+    label_class="left-label"
+    hint="<__trans phrase="Content that appears on Thank You Page for this Petition">"
+    show_hint="0">
+   <textarea name="petition_thank_you" id="petition_thank_you" class="full-width" rows="6" cols="50"><mt:var name="petition_thank_you" escape="html"></textarea>
+</mtapp:setting>
+
+<mtapp:setting
+    id="petition_email_subject"
+    label="<__trans phrase="Email Subject">"
+    label_class="left-label"
+    hint="<__trans phrase="Email Subject">"
+    show_hint="0">
+   <input name="petition_email_subject" id="petition_email_subject" value="<mt:var name="petition_email_subject" escape="html">" class="full-width" />
+</mtapp:setting>
+
+<mtapp:setting
+    id="petition_email_text"
+    label="<__trans phrase="Email Text">"
+    label_class="left-label"
+    hint="<__trans phrase="Email Confirmation Text">"
+    show_hint="0">
+   <textarea name="petition_email_text" id="petition_email_text" class="full-width" rows="6" cols="50"><mt:var name="petition_email_text" escape="html"></textarea>
+</mtapp:setting>
+
+<mt:ignore><!--
+<mtapp:setting
+    id="petition_featured"
+    label="<__trans phrase="Featured">"
+    label_class="left-label"
+    hint="<__trans phrase="Is the petition featured?">"
+    show_hint="0">
+   <input type="checkbox" name="petition_featured" id="petition_featured" <mt:if name="petition_featured">checked="checked" </mt:if>/>
+</mtapp:setting>
+--></mt:ignore>
+
+<mt:ignore><!--
+<mtapp:setting
+    id="petition_active"
+    label="<__trans phrase="Active">"
+    label_class="left-label"
+    hint="<__trans phrase="Is the petition still active?">"
+    show_hint="0">
+   <input type="checkbox" name="petition_active" id="petition_active" <mt:if name="petition_active">checked="checked" </mt:if>/>
+</mtapp:setting>
+--></mt:ignore>
+
+<mt:if name="id">
+<mt:loop var="questions_loop">
+   <mt:ignore>Questions already exist</mt:ignore>
+   <mt:if var="new">
+   <mt:else>
+   <input type="hidden" name="display_order_<mt:var name="id">" value="<mt:var name="display_order">" />
+   <input type="hidden" name="question_<mt:var name="id">" value="<mt:var name="question">" />
+   <input type="hidden" name="slug_<mt:var name="id">" value="<mt:var name="slug">" />
+   <mt:if name="required">
+      <input type="hidden" value="1" name="required_<mt:var name="id">" />
+   </mt:if>
+   <input type="hidden" name="validation_<mt:var name="id">" value="<mt:var name="validation">"  />
+   <input type="hidden" name="type_<mt:var name="id">" value="<mt:var name="type">" />
+   <!-- answers for this question -->
+   <mt:loop var="answers">
+      <mt:if name="question_id">
+         <input type="hidden" name="display_order_<mt:var name="question_id">_<mt:var name="id">" value="<mt:var name="display_order">" />
+	  <input type="hidden" name="answer_<mt:var name="question_id">_<mt:var name="id">"  value="<mt:var name="text">" /> 
+      </mt:if>
+   </mt:loop>
+   </mt:if>
+</mt:loop>
+
+
+<mt:else>
+   <mt:ignore>Questions don't exist</mt:ignore>
+
+   <input type="hidden" value="First Name" name="new_question_1" />
+   <input type="hidden" value="Last Name" name="new_question_2" />
+   <input type="hidden" value="Email" name="new_question_3" />
+   <input type="hidden" value="Zipcode" name="new_question_4" />
+   <input type="hidden" value="Sign up for email updates" name="new_question_5" />
+   <input type="hidden" value="We want Congress to know that Americans of all political backgrounds support this effort. If you would like to share your party affiliation, please select from the list below." name="new_question_6" />
+
+   <input type="hidden" value="1" name="display_order_1" />
+   <input type="hidden" value="2" name="display_order_2" />
+   <input type="hidden" value="3" name="display_order_3" />
+   <input type="hidden" value="4" name="display_order_4" />
+   <input type="hidden" value="5" name="display_order_5" />
+   <input type="hidden" value="6" name="display_order_6" />
+
+   <mt:ignore>Question Type</mt:ignore>
+   <input type="hidden" value="1" name="new_type_1" />
+   <input type="hidden" value="1" name="new_type_2" />
+   <input type="hidden" value="1" name="new_type_3" />
+   <input type="hidden" value="2" name="new_type_4" />
+   <input type="hidden" value="7" name="new_type_5" />
+   <input type="hidden" value="5" name="new_type_6" />
+
+   <input type="hidden" value="first_name" name="new_slug_1" />
+   <input type="hidden" value="last_name" name="new_slug_2" />
+   <input type="hidden" value="email" name="new_slug_3" />
+   <input type="hidden" value="zipcode" name="new_slug_4" />
+   <input type="hidden" value="signup_email" name="new_slug_5" />
+   <input type="hidden" value="political_party" name="new_slug_6" />
+
+   <mt:ignore>Validation Required</mt:ignore>
+   <input type="hidden" value="1" name="new_required_1" />
+   <input type="hidden" value="1" name="new_required_2" />
+   <input type="hidden" value="1" name="new_required_3" />
+   <input type="hidden" value="1" name="new_required_4" />
+
+   <mt:ignore>Validation</mt:ignore>
+   <input type="hidden" value="email" name="new_validation_3" />
+   <input type="hidden" value="digits" name="new_validation_4" />
+
+   <mt:ignore>Answers</mt:ignore>
+   <input type="hidden" value="1" name="display_order_6_1" />
+   <input type="hidden" value="2" name="display_order_6_2" />
+   <input type="hidden" value="3" name="display_order_6_3" />
+   <input type="hidden" value="4" name="display_order_6_4" />
+   <input type="hidden" value="5" name="display_order_6_5" />
+
+   <input type="hidden" value="-" name="new_answer_6_1" />
+   <input type="hidden" value="Democrat" name="new_answer_6_2" />
+   <input type="hidden" value="Independent" name="new_answer_6_3" />
+   <input type="hidden" value="Republican" name="new_answer_6_4" />   
+   <input type="hidden" value="Other" name="new_answer_6_5" />
+</mt:if>
+
+
+<mt:ignore>
+<mt:loop name="questions_loop" var="qloop">
+   <mtapp:setting
+       id="<mt:if name="new">new_</mt:if>question_<mt:var name="id">"
+       label="<__trans phrase="Question"> <mt:var name="display_order">"
+       label_class="left-label"
+       hint="<__trans phrase="Update the question">"
+       show_hint="0">
+      <input type="hidden" name="display_order_<mt:var name="id">" value="<mt:var name="display_order">" />
+      <input type="text" id="<mt:if name="new">new_</mt:if>question_<mt:var name="id">" class="full-width" name="<mt:if name="new">new_</mt:if>question_<mt:var name="id">" value="<mt:var name="question" escape="html">" /><br />
+
+      <p>
+         <input type="checkbox" value="1" name="<mt:if name="new">new_</mt:if>required_<mt:var name="id">" id="<mt:if name="new">new_</mt:if>required_<mt:var name="id">" <mt:if name="required">checked="checked" </mt:if> /> <label for="<mt:if name="new">new_</mt:if>required_<mt:var name="id">">Required?</label>
+      </p>
+      <p id="<mt:if name="new">new_</mt:if>validation_<mt:var name="id">_container"><label for="<mt:if name="new">new_</mt:if>validation_<mt:var name="id">">Validation</label>
+         <select id="<mt:if name="new">new_</mt:if>validation_<mt:var name="id">" name="<mt:if name="new">new_</mt:if>validation_<mt:var name="id">">
+            <option value=""></option>
+            <option value="email"<mt:if name="validation" eq="email"> selected="selected"</mt:if>>Email</option>
+            <option value="number"<mt:if name="validation" eq="number"> selected="selected"</mt:if>>Number</option>
+            <option value="digits"<mt:if name="validation" eq="digits"> selected="selected"</mt:if>>Digits</option>
+            <option value="url"<mt:if name="validation" eq="url"> selected="selected"</mt:if>>URL</option>
+         </select>
+      </p>
+
+
+      <select class="question_type_select" name="<mt:if name="new">new_</mt:if>type_<mt:var name="id">" id="<mt:if name="new">new_</mt:if>type_<mt:var name="id">">
+         <optgroup label="Single Answer">
+            <option value="1"<mt:if name="type" eq="1"> selected="selected"</mt:if>>Text box</option>
+            <option value="2"<mt:if name="type" eq="2"> selected="selected"</mt:if>>Short Text box</option>
+            <option value="3"<mt:if name="type" eq="3"> selected="selected"</mt:if>>Long Text box</option>
+         </optgroup>
+         <optgroup label="Multiple Choice/Multiple Answer">
+            <option value="4"<mt:if name="type" eq="4"> selected="selected"</mt:if>>Radios</option>
+            <option value="5"<mt:if name="type" eq="5"> selected="selected"</mt:if>>Select</option>
+            <option value="6"<mt:if name="type" eq="6"> selected="selected"</mt:if>>Checkboxes - Multiple Answer</option>
+         </optgroup>
+         <optgroup label="Confirmation">
+            <option value="7"<mt:if name="type" eq="7"> selected="selected"</mt:if>>Checkbox</option>
+         </optgroup>
+
+      </select>
+
+      <br />
+      <div id="q_answers_<mt:if name="new">new_</mt:if>type_<mt:var name="id">">
+      <mt:loop var="answers">
+         <mt:if name="question_id">
+         <mtapp:setting
+             id="<mt:if name="new">new_</mt:if>answer_<mt:var name="question_id">_<mt:var name="id">"
+             label="<__trans phrase="Answer"> <mt:var name="display_order">"
+             label_class="left-label"
+             hint="<__trans phrase="Update the answer">"
+             show_hint="0">
+            <input type="hidden" name="display_order_<mt:var name="question_id">_<mt:var name="id">" value="<mt:var name="display_order">" />
+	     <input name="<mt:if name="new">new_</mt:if>answer_<mt:var name="question_id">_<mt:var name="id">" id="<mt:if name="new">new_</mt:if>answer_<mt:var name="question_id">_<mt:var name="id">" value="<mt:var name="text" escape="html">" class="half-width" /> 
+         </mtapp:setting>
+         </mt:if>
+      </mt:loop>
+      </div>
+   </mtapp:setting>
+</mt:loop>
+-->
+</mt:ignore>
+
+
+
+<mt:if name="position_actions_bottom">
+    <mt:include name="include/actions_bar.tmpl" bar_position="bottom" hide_pager="1">
+</mt:if>
+</form>
+
+
+   <script type="text/javascript">
+    /* <![CDATA[ */
+jQuery(document).ready(function($) {
+   var hide_answers = [
+      null, true, true, true, false, false, false, true,
+   ];
+   var show_hide_answers = function(el, sh) {
+      if (sh) {
+        el.hide();
+      }
+      else {
+        el.show();
+      }
+   };
+   var f = function() { 
+       var answers = $('#q_answers_' + $(this).attr('id'));
+       show_hide_answers(answers, hide_answers[$(this).val()]);
+   };
+   $('select.question_type_select').change(f).each(f);
+});
+
+/* ]]> */
+   </script>
+
+<mt:include name="include/footer.tmpl">
