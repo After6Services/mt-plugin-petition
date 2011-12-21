@@ -1,0 +1,26 @@
+.poll-answer {
+	position: relative;
+	font: 9px/10px arial, sans-serif;
+	margin-top: 2px;
+	padding-right: 1px;
+	margin-bottom: 3px;
+
+	display: block;
+	//float: left;
+	height: 5px;
+	cursor:default;
+	text-decoration: none;
+	border: 0;
+	background: #efefef;
+	border-bottom: 5px solid #e0e0e0;
+	border-right: 1px solid #ccc;
+}
+
+#pollquiz .widget-list-item {
+    clear: both;
+}
+
+#pollquiz .poll-total {
+    clear: both;
+}
+
